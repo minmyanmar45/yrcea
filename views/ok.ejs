@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Success</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #28a745, #a0e676);
+        color: #fff;
+      }
+
+      .container {
+        text-align: center;
+        padding: 20px 40px;
+        background: #fff;
+        color: #333;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .container h1 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+        color: #28a745;
+      }
+
+      .container p {
+        font-size: 1rem;
+        margin-bottom: 20px;
+        color: #555;
+      }
+
+      .container button {
+        padding: 10px 20px;
+        font-size: 1rem;
+        font-weight: bold;
+        color: #fff;
+        background-color: #28a745;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .container button:hover {
+        background-color: #218838;
+      }
+
+      .container button:active {
+        transform: scale(0.95);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Success 200 OK</h1>
+      <p>Your request was successfully processed.</p>
+      <button onclick="closeWindow()">OK</button>
+    </div>
+
+    <script>
+      /**
+       * Closes the current browser window.
+       */
+      function closeWindow() {
+        window.close();
+      }
+    </script>
+  </body>
+</html>

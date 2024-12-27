@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YRCEA Member Details</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+        color: #333;
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 20px auto;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .header {
+        background-color: #007bff;
+        color: white;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .header img {
+        border-radius: 5%;
+        width: 100px;
+        height: 100px;
+        margin-right: 20px;
+        background-color: #007bff;
+        border: 2px solid white;
+      }
+
+      .header h1 {
+        font-size: 24px;
+        margin: 0;
+        flex: 1;
+      }
+
+      .header p {
+        margin: 5px 0 0;
+        font-size: 16px;
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      .section {
+        margin-bottom: 20px;
+      }
+
+      .section h2 {
+        font-size: 20px;
+        margin-bottom: 15px;
+        border-bottom: 3px solid #007bff;
+        display: inline-block;
+        padding-bottom: 5px;
+      }
+
+      .details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+      }
+
+      .details .item {
+        margin: 5px 0;
+      }
+
+      .details .item label {
+        font-weight: bold;
+      }
+
+      .grade-section {
+        display: flex;
+        align-items: center;
+        margin-top: 5px;
+      }
+
+      .grade-section img {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        margin-left: 10px;
+      }
+
+      .more-details-section {
+        text-align: center;
+        margin-top: 30px;
+      }
+
+      .more-details-section h2 {
+        font-size: 22px;
+        color: #333;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-bottom: 2px solid #007bff;
+        display: inline-block;
+        padding-bottom: 5px;
+      }
+
+      .pdf-section {
+        text-align: center;
+        margin-top: 15px;
+      }
+
+      .pdf-section a {
+        text-decoration: none;
+        color: white;
+        background-color: #007bff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: bold;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+
+      .pdf-section a:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+      }
+
+      .footer {
+        background-color: #f1f1f1;
+        text-align: center;
+        padding: 10px;
+        font-size: 14px;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .header {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .header img {
+          margin: 10px auto 20px;
+        }
+
+        .header h1 {
+          margin: 10px 0;
+          font-size: 20px;
+        }
+
+        .details {
+          grid-template-columns: 1fr;
+        }
+
+        .pdf-section a {
+          padding: 8px 16px;
+          font-size: 14px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .header h1 {
+          font-size: 18px;
+        }
+
+        .section h2 {
+          font-size: 18px;
+        }
+
+        .pdf-section a {
+          padding: 7px 14px;
+          font-size: 12px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- Header Section -->
+      <div class="header">
+        <img src="<%= member.member_photo %>" alt="Member Photo" />
+        <div>
+          <h1><%= member.name %></h1>
+          <div class="grade-section">
+            <!-- <label>Grade:</label>-->
+            <span><%= member.memberGrade %></span>
+            <% if (member.icon_file) { %>
+            <img src="<%= member.icon_file %>" alt="Icon" />
+            <% } %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content Section -->
+      <div class="content">
+        <!-- Personal Details -->
+        <div class="section">
+          <h2>Personal Details</h2>
+          <div class="details">
+            <div class="item"><label>ID:</label> <%= member.member_id %></div>
+
+            <div class="item">
+              <label>Member Issue Date:</label> <%=
+              member.member_card_issue_date.toDateString() %>
+            </div>
+
+            <div class="item"><label>Gender:</label> <%= member.gender %></div>
+            <div class="item">
+              <label>Date of Birth:</label> <%= member.dob.toDateString() %>
+            </div>
+            <div class="item"><label>NRC NO:</label> <%= member.nrc_no %></div>
+            <div class="item"><label>Phone:</label> <%= member.phone %></div>
+            <div class="item"><label>Email:</label> <%= member.email %></div>
+
+            <div class="item">
+              <label>Township:</label> <%= member.township %>
+            </div>
+
+            <div class="item">
+              <label>Division:</label> <%= member.division %>
+            </div>
+
+            <div class="item">
+              <label>Address:</label> <%= member.address %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Educational Details 
+        <% if (member.school || member.education) { %>
+        <div class="section">
+          <h2>Educational Details</h2>
+          <div class="details">
+            <% if (member.school) { %>
+            <div class="item"><label>School:</label> <%= member.school %></div>
+            <% } %> <% if (member.education) { %>
+            <div class="item">
+              <label>Education Level:</label> <%= member.education %>
+            </div>
+            <% } %>
+          </div>
+        </div>
+        <% } %>
+      -->
+
+        <!-- Educational Details -->
+        <% if (member.school || member.education || (member.degrees &&
+        member.degrees.length)) { %>
+        <div class="section">
+          <h2>Educational Details</h2>
+          <div class="details">
+            <% if (member.school) { %>
+            <div class="item"><label>School:</label> <%= member.school %></div>
+            <% } %> <% if (member.education) { %>
+            <div class="item">
+              <label>Education Level:</label> <%= member.education %>
+            </div>
+            <% } %> <% if (member.degrees && member.degrees.length) { %>
+            <div class="item" style="grid-column: 1 / -1">
+              <label>Degrees:</label>
+              <ul>
+                <% member.degrees.forEach((degree) => { %>
+                <li>
+                  <strong><%= degree.degree %></strong> - <%= degree.institution
+                  %> (<%= degree.degree_date ? degree.degree_date.toDateString()
+                  : 'Date not provided' %>)
+                </li>
+                <% }); %>
+              </ul>
+            </div>
+            <% } %>
+          </div>
+        </div>
+        <% } %>
+
+        <!-- Employment Details -->
+        <% if (member.position || member.department || member.company) { %>
+        <div class="section">
+          <h2>Employment Details</h2>
+          <div class="details">
+            <% if (member.position) { %>
+            <div class="item">
+              <label>Position:</label> <%= member.position %>
+            </div>
+            <% } %> <% if (member.department) { %>
+            <div class="item">
+              <label>Department:</label> <%= member.department %>
+            </div>
+            <% } %> <% if (member.company) { %>
+            <div class="item">
+              <label>Company:</label> <%= member.company %>
+            </div>
+            <% } %>
+          </div>
+        </div>
+        <% } %>
+
+        <!-- Interests -->
+        <% if (member.interests && member.interests.length) { %>
+        <div class="section">
+          <h2>Interests</h2>
+          <div class="details">
+            <div class="item">
+              <label>Areas of Interest:</label> <%= member.interests.join(', ')
+              %>
+            </div>
+          </div>
+        </div>
+        <% } %>
+
+        <!-- Community Interest -->
+        <% if (member.join_interest) { %>
+        <div class="section">
+          <h2>Community Interest</h2>
+          <div class="details">
+            <div class="item">
+              <label>Joining Interest:</label> <%= member.join_interest %>
+            </div>
+          </div>
+        </div>
+        <% } %>
+
+        <!--Member Issue -->
+        <div class="section">
+          <h2>Approve Person</h2>
+          <div class="details">
+            <div class="item">
+              <label>Name:</label> <%= member.approve_person_name %>
+            </div>
+
+            <div class="item">
+              <label>Member Card Issue Date:</label> <%=
+              member.member_card_issue_date.toDateString() %>
+            </div>
+
+            <div class="item">
+              <label>Card Expiration Date:</label> <%=
+              member.card_expiration_date.toDateString() %>
+            </div>
+          </div>
+        </div>
+
+        <!-- More Details Section -->
+        <% if (member.pdf_file) { %>
+        <div class="more-details-section">
+          <h2>More Details</h2>
+          <div class="pdf-section">
+            <!--
+            <h3><%= member.pdf_file.split('/').pop() %></h3>
+          -->
+            <a href="<%= member.pdf_file %>" target="_blank">View PDF</a>
+          </div>
+        </div>
+        <% } %>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">&copy; 2024 YRCEA Member Portal</div>
+    </div>
+
+    <!--Header Div BG Img changer-->
+    <script>
+      // Wait until the DOM is fully loaded
+      document.addEventListener("DOMContentLoaded", function () {
+        // Get the grade span and the header element
+        const gradeSpan = document.querySelector(".grade-section span");
+        const headerDiv = document.querySelector(".header");
+
+        // Check if both elements are present
+        if (gradeSpan && headerDiv) {
+          // Get the member grade from the span's innerHTML and trim any extra spaces
+          const memberGrade = gradeSpan.innerHTML.trim().toLowerCase();
+
+          // Define the background image URL based on the member grade
+          let backgroundImageUrl = "";
+          switch (memberGrade) {
+            case "starter member":
+              backgroundImageUrl = "/public/bg-starter.jpeg";
+              break;
+            case "bronze member":
+              backgroundImageUrl = "/public/bg-bronze.jpeg";
+              break;
+            case "silver member":
+              backgroundImageUrl = "/public/bg-silver.jpeg";
+              break;
+            case "gold member":
+              backgroundImageUrl = "/public/bg-gold.jpeg";
+              break;
+            case "platinum member":
+              backgroundImageUrl = "/public/bg-platinum.jpeg";
+              break;
+            case "diamond member":
+              backgroundImageUrl = "/public/bg-diamond.jpeg";
+              break;
+            default:
+              console.warn("Unknown member grade:", memberGrade);
+          }
+
+          // Apply the background image if a valid URL is determined
+          if (backgroundImageUrl) {
+            headerDiv.style.backgroundImage = `url(${backgroundImageUrl})`;
+            headerDiv.style.backgroundSize = "cover";
+            headerDiv.style.backgroundPosition = "center";
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

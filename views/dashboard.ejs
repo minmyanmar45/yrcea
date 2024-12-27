@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YRCEA Admin Dashboard</title>
+    <style>
+      /* General styles */
+      body {
+        margin: 0;
+        font-family: "Arial", sans-serif;
+        background-color: #f5f5f5;
+        color: #333;
+      }
+
+      h1 {
+        text-align: center;
+        margin-top: 20px;
+        color: #4caf50;
+      }
+
+      .container {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      /* Table styles */
+      table {
+        border-collapse: collapse;
+        width: 90%;
+        margin: 20px auto;
+        background-color: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      thead {
+        background-color: #4caf50;
+      }
+
+      th,
+      td {
+        padding: 12px 15px;
+        text-align: center;
+        border: 1px solid #ddd;
+      }
+
+      th {
+        color: white;
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+
+      td {
+        font-size: 14px;
+      }
+
+      tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+
+      tbody tr:hover {
+        background-color: #f1f1f1;
+        cursor: pointer;
+      }
+
+      /* Remove user button */
+      span[data-doc] {
+        color: #e74c3c;
+        text-decoration: none;
+        font-weight: bold;
+        cursor: pointer;
+        transition: color 0.3s;
+      }
+
+      span[data-doc]:hover {
+        color: #c0392b;
+      }
+
+      /* Password input and button */
+      input[type="password"] {
+        padding: 6px 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 130px;
+        margin-right: 5px;
+        font-size: 14px;
+      }
+
+      p[data-doc] {
+        display: inline-block;
+        background-color: #4caf50;
+        color: white;
+        padding: 6px 10px;
+        border-radius: 4px;
+        text-align: center;
+        font-size: 14px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      p[data-doc]:hover {
+        background-color: #388e3c;
+      }
+
+      /* Responsive styles */
+      @media screen and (max-width: 768px) {
+        table {
+          width: 100%;
+          font-size: 12px;
+        }
+
+        input[type="password"] {
+          width: 70%;
+        }
+      }
+
+      @media screen and (max-width: 480px) {
+        th,
+        td {
+          font-size: 12px;
+        }
+
+        input[type="password"] {
+          width: 60%;
+        }
+
+        p[data-doc] {
+          font-size: 12px;
+          padding: 5px 8px;
+        }
+      }
+
+      /* Pagination Styles */
+      .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 0;
+      }
+
+      .pagination a {
+        text-decoration: none;
+        color: #4caf50;
+        padding: 10px 15px;
+        margin: 0 5px;
+        border: 1px solid #4caf50;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+      }
+
+      .pagination a.active {
+        background-color: #4caf50;
+        color: white;
+      }
+
+      .pagination a:hover {
+        background-color: #388e3c;
+        color: white;
+      }
+
+      .pagination a.prev,
+      .pagination a.next {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <%- include("header.ejs") %>
+  <script>
+    document.getElementById("dashboard").style.color = "lime";
+  </script>
+  <body>
+    <div class="container" style="position: relative; top: 50px">
+      <table>
+        <thead>
+          <tr>
+            <th>Full Name</th>
+            <th>Username</th>
+            <th>Role</th>
+            <th>Mobile</th>
+            <th>Remove</th>
+            <th>Password</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (userlist.length > 0) { userlist.forEach((user) => { %>
+          <tr>
+            <td><%= user.displayname %></td>
+            <td><%= user.username %></td>
+            <td><%= user.role %></td>
+            <td><%= user.mobile %></td>
+            <td>
+              <span id="<%= user._id %>" data-doc="<%= user.username %>">
+                Remove User
+              </span>
+            </td>
+            <td>
+              <input
+                id="chgForm-<%= user._id %>"
+                type="password"
+                name="password"
+                data-doc="<%= user.username %>"
+              />
+              <p id="<%= user._id %>" data-doc="<%= user.username %>">Change</p>
+            </td>
+          </tr>
+          <% })} else { %>
+          <tr>
+            <td colspan="6">There are no users to display</td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+      <!--Pagination-->
+      <div class="pagination">
+        <% if (currentPage > 1) { %>
+        <a
+          href="/api/auth/dashboard?page=<%= currentPage - 1 %>&limit=5"
+          class="prev"
+          >Prev</a
+        >
+        <% } %> <% for (let i = 1; i <= totalPages; i++) { %>
+        <a
+          href="/api/auth/dashboard?page=<%= i %>&limit=5"
+          class="<%= i === currentPage ? 'active' : '' %>"
+          ><%= i %></a
+        >
+        <% } %> <% if (currentPage < totalPages) { %>
+        <a
+          href="/api/auth/dashboard?page=<%= currentPage + 1 %>&limit=5"
+          class="next"
+          >Next</a
+        >
+        <% } %>
+      </div>
+    </div>
+
+    <!-- DELETE Script Start-->
+    <script>
+      // Loop through all "remove user" span elements and attach click event listeners
+      document.querySelectorAll("span[data-doc]").forEach((delbt) => {
+        delbt.addEventListener("click", (e) => {
+          e.preventDefault();
+
+          // Retrieve the username and ID from the respective attributes
+          const username = delbt.dataset.doc; // Username from `data-doc`
+          const id = delbt.id; // User ID from `id`
+
+          // Retrieve the role from the row containing this span
+          const role = delbt
+            .closest("tr")
+            .querySelector("td:nth-child(3)")
+            .textContent.trim(); // 3rd cell in the row
+
+          // Define the API endpoint for deleting the user
+          const url = `/api/auth/delete`;
+
+          // Send a DELETE request to the server using Axios
+          axios
+            .delete(url, {
+              headers: {
+                "Content-Type": "application/json", // Specify content type
+              },
+              data: {
+                id: id, // Include user ID in the body
+                role: role, // Add role in the body
+                username: username, // Include username in the body
+              },
+            })
+            .then((res) => {
+              // Notify the user of the successful deletion
+              alert(
+                `User ${username} with role ${role} has been removed successfully!`
+              );
+              console.log(res.data);
+
+              // Remove the user row from the DOM
+              delbt.closest("tr").remove();
+            })
+            .catch((error) => {
+              // Check if the error is a 403 (Access Denied)
+              if (error.response && error.response.status === 403) {
+                // Redirect to the access denied page
+                window.location.href = "/api/auth/unauthorized";
+              } else {
+                // Handle other errors
+                console.error("Error deleting user:", error);
+                alert("Failed to delete the user. Please try again.");
+              }
+            });
+        });
+      });
+    </script>
+
+    <!--PASSWORD RESET Script -->
+    <script>
+      // Loop through all "change password" span elements and attach click event listeners
+      document.querySelectorAll("p[data-doc]").forEach((chgbt) => {
+        chgbt.addEventListener("click", (e) => {
+          e.preventDefault();
+
+          // Retrieve the username and user ID from the `data-doc` and span ID
+          const username = chgbt.dataset.doc; // Username stored in `data-doc`
+          const userId = chgbt.id; // Span ID corresponds to the user ID
+
+          // Get the password input field associated with the user
+          const passwordInput = document.getElementById(`chgForm-${userId}`);
+          //const id = document.getElementsByTagName("p")[0].id;
+
+          // Validate that the password field is not empty
+          if (!passwordInput.value) {
+            alert("Password cannot be empty. Please enter a new password.");
+            return;
+          }
+
+          // Define the API endpoint
+          const url = `/api/auth/resetpassword`;
+
+          // Send a PATCH request to the server using Axios
+          axios
+            .patch(
+              url,
+              {
+                username: username, // Include the username
+                password: passwordInput.value, // Include the new password
+                id: userId,
+              },
+              {
+                headers: {
+                  // Authorization: sessionStorage.getItem("savedToken"), // Add the saved token
+                },
+              }
+            )
+            .then((res) => {
+              // Notify the user of the successful password reset
+              alert(`Password for ${username} has been reset successfully!`);
+              passwordInput.value = "";
+              console.log(res.data);
+            })
+            .catch((error) => {
+              // Handle errors appropriately
+              passwordInput.value = "";
+              alert(`You can't change password of others`);
+              console.error("Error resetting password:", error);
+            });
+        });
+      });
+    </script>
+  </body>
+</html>

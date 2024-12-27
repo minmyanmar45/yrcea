@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YRCEA Member Application Form</title>
+    <link rel="stylesheet" href="/public/memberform.css" />
+    <style>
+      /* Modal styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        padding-top: 100px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+
+      .modal-content {
+        background-color: #fff;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 30%;
+        text-align: center;
+        border-radius: 10px;
+      }
+
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+    </style>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f6f9;
+        color: #333;
+      }
+
+      .form-container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        font-size: 24px;
+        color: #007bff;
+        text-align: center;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      fieldset {
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+      }
+
+      legend {
+        padding: 0 10px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      input,
+      select,
+      textarea {
+        width: calc(100% - 20px);
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+
+      textarea {
+        resize: none;
+      }
+
+      button[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        border: none;
+        color: #fff;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      button[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+
+      .checkbox-group label {
+        display: inline-block;
+        margin-right: 10px;
+        font-weight: normal;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 10;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-content {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .modal-content p {
+        margin-bottom: 15px;
+      }
+
+      .modal-content .close {
+        float: right;
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        color: #333;
+      }
+
+      .close:hover {
+        color: #007bff;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        body {
+          padding: 10px;
+        }
+
+        .form-container {
+          padding: 15px;
+        }
+
+        input,
+        select,
+        textarea {
+          width: calc(100% - 10px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <%- include("header.ejs") %>
+    <script>
+      document.getElementById("dataEntry").style.color = "lime";
+    </script>
+
+    <div class="form-container" style="position: relative; top: 50px">
+      <form id="member-application-form">
+        <h1 srtyle="position:relative; top:300px;">
+          YRCEA Member Application Form
+        </h1>
+        <!-- Add Member Photo Fieldset -->
+        <fieldset>
+          <legend>Member Photo</legend>
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 20px;
+              flex-wrap: wrap;
+            "
+          >
+            <!-- Member Photo -->
+            <div>
+              <label for="member-photo">Upload Member Photo</label>
+              <input
+                type="file"
+                id="member-photo"
+                name="member_photo"
+                accept="image/*"
+                required
+              />
+            </div>
+
+            <!-- Member Grade -->
+            <div>
+              <label for="member-grade">Member Grade</label>
+              <select id="member-grade" name="member_grade" required>
+                <option value="starter member">starter</option>
+                <option value="bronze member">Bronze</option>
+                <option value="silver member">Silver</option>
+                <option value="gold member">Gold</option>
+                <option value="platinum member">Platinum</option>
+                <option value="diamond member">Diamond</option>
+                <!-- Changed to diamond for uniqueness -->
+              </select>
+            </div>
+
+            <!-- Points -->
+            <div>
+              <label for="member-points">Points</label>
+              <input
+                type="number"
+                id="member-points"
+                name="member_points"
+                placeholder="Enter points"
+                required
+                min="0"
+              />
+            </div>
+            <!-- Icon Upload -->
+            <div>
+              <label for="icon-upload">Upload Icon</label>
+              <input
+                type="file"
+                id="icon-upload"
+                name="icon_upload"
+                accept="image/*"
+                required
+              />
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Member ID -->
+        <fieldset>
+          <legend>Member ID</legend>
+          <!--<label for="member-id">Member ID</label>-->
+          <input
+            type="text"
+            id="member-id"
+            name="member_id"
+            placeholder="Enter your Member ID"
+            required
+          />
+        </fieldset>
+
+        <!-- Personal Information -->
+        <fieldset>
+          <legend>Personal Information</legend>
+          <label for="name">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Enter your name"
+            required
+          />
+
+          <label for="gender">Gender</label>
+          <select id="gender" name="gender" required>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+
+          <label for="dob">Date of Birth</label>
+          <input type="date" id="dob" name="dob" required />
+
+          <label for="father-name">Father's Name</label>
+          <input
+            type="text"
+            id="father-name"
+            name="father_name"
+            placeholder="Enter your father's name"
+            required
+          />
+
+          <label for="age">Age</label>
+          <input
+            type="number"
+            id="age"
+            name="age"
+            placeholder="Enter your age"
+            required
+          />
+
+          <label for="nrc-no">NRC No</label>
+          <input
+            type="text"
+            id="nrc-no"
+            name="nrc_no"
+            placeholder="Enter NRC No"
+            required
+          />
+
+          <label for="phone">Phone</label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            placeholder="Enter phone number"
+            required
+          />
+
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter email address"
+            required
+          />
+
+          <label for="township">Township</label>
+          <input
+            type="text"
+            id="township"
+            name="township"
+            placeholder="Enter your township"
+            required
+          />
+
+          <label for="division">Division</label>
+          <input
+            type="text"
+            id="division"
+            name="division"
+            placeholder="Enter your division"
+            required
+          />
+
+          <label for="address">Address</label>
+          <textarea
+            id="address"
+            name="address"
+            rows="3"
+            placeholder="Enter your address"
+            required
+          ></textarea>
+        </fieldset>
+
+        <!-- For Student -->
+        <fieldset>
+          <legend>For Student</legend>
+          <label for="school">School/University</label>
+          <input
+            type="text"
+            id="school"
+            name="school"
+            placeholder="Enter your school/university"
+          />
+
+          <label for="class">Class</label>
+          <input
+            type="text"
+            id="class"
+            name="class"
+            placeholder="Enter your class"
+          />
+
+          <label for="school-address">School/University Address</label>
+          <textarea
+            id="school-address"
+            name="school_address"
+            rows="2"
+            placeholder="Enter your school address"
+          ></textarea>
+        </fieldset>
+
+        <!-- For Non-Student -->
+        <fieldset>
+          <legend>For Non Student</legend>
+          <label for="education">Education Information</label>
+          <select id="education" name="education">
+            <option value="post-graduate">Post Graduate</option>
+            <option value="graduate" selected>Graduate</option>
+            <option value="undergraduate">Undergraduate</option>
+          </select>
+
+          <label>Degree(s)/Diploma(s) (Most Recent First)</label>
+          <div class="degree-container">
+            <input type="text" name="degree1" placeholder="Degree/Diploma" />
+            <input type="date" name="degree_date1" />
+            <input type="text" name="institution1" placeholder="Institution" />
+          </div>
+          <div class="degree-container">
+            <input type="text" name="degree2" placeholder="Degree/Diploma" />
+            <input type="date" name="degree_date2" />
+            <input type="text" name="institution2" placeholder="Institution" />
+          </div>
+          <div class="degree-container">
+            <input type="text" name="degree3" placeholder="Degree/Diploma" />
+            <input type="date" name="degree_date3" />
+            <input type="text" name="institution3" placeholder="Institution" />
+          </div>
+
+          <label for="position">Current Employment</label>
+          <input
+            type="text"
+            id="position"
+            name="position"
+            placeholder="Position"
+          />
+
+          <label for="department">Department</label>
+          <input
+            type="text"
+            id="department"
+            name="department"
+            placeholder="Department"
+          />
+
+          <label for="company">Company</label>
+          <input
+            type="text"
+            id="company"
+            name="company"
+            placeholder="Company"
+          />
+        </fieldset>
+
+        <!-- Area of Interest -->
+        <fieldset>
+          <legend>Area of Interest</legend>
+          <label>Select your interests:</label>
+          <div class="checkbox-group">
+            <label
+              ><input type="checkbox" name="interest" value="ai" /> AI</label
+            >
+            <label
+              ><input type="checkbox" name="interest" value="computer-art" />
+              Computer Art</label
+            >
+            <label
+              ><input type="checkbox" name="interest" value="vlogging" />
+              Vlogging</label
+            >
+            <label
+              ><input
+                type="checkbox"
+                name="interest"
+                value="application-skill"
+              />
+              Application Skill</label
+            >
+            <label
+              ><input type="checkbox" name="interest" value="internet" />
+              Internet</label
+            >
+            <label
+              ><input type="checkbox" name="interest" value="graphic-design" />
+              Graphic Design</label
+            >
+            <label
+              ><input
+                type="checkbox"
+                name="interest"
+                value="computer-accounting"
+              />
+              Accounting</label
+            >
+            <label
+              ><input
+                type="checkbox"
+                name="interest"
+                value="computer-programming"
+              />
+              Programming</label
+            >
+            <label
+              ><input type="checkbox" name="interest" value="gaming" />
+              Gaming</label
+            >
+            <label
+              ><input
+                type="checkbox"
+                name="interest"
+                value="digital-marketing"
+              />
+              Digital Marketing</label
+            >
+            <label
+              ><input type="checkbox" name="interest" value="other" />
+              Other</label
+            >
+          </div>
+        </fieldset>
+
+        <!-- Join Community -->
+        <fieldset>
+          <legend>Let Us Know Your Interest to Join Our Community</legend>
+          <label for="join-interest">Interest:</label>
+          <select id="join-interest" name="join_interest">
+            <option value="sharing">Sharing</option>
+            <option value="learning">Learning</option>
+            <option value="sharing and learning">Both</option>
+          </select>
+        </fieldset>
+
+        <!-- PDF Upload -->
+        <fieldset>
+          <legend>Upload Supporting PDF Document</legend>
+          <!--<label for="pdf-upload">Upload PDF Document</label>-->
+          <input
+            type="file"
+            id="pdf-upload"
+            name="pdf_file"
+            accept="application/pdf"
+            required
+          />
+        </fieldset>
+
+        <!-- Fields for Approval -->
+        <fieldset>
+          <legend>Fields for Approval</legend>
+          <label for="approve_person_name">Approving Person's Name:</label>
+          <input
+            type="text"
+            id="approve_person_name"
+            name="approve_person_name"
+            required
+          />
+          <!--Member Card Issue Date-->
+          <label for="member_card_issue_date">Member Card Issue Date:</label>
+          <input
+            type="date"
+            id="member_card_issue_date"
+            name="member_card_issue_date"
+            required
+          />
+          <!-- Member Card Expiration Date -->
+          <label for="card-expiration-date">Card Expiration Date:</label>
+          <input
+            type="date"
+            id="card-expiration-date"
+            name="card_expiration_date"
+            required
+          />
+        </fieldset>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+
+    <!-- Add Modal Structure in Body -->
+    <div id="modal" class="modal" style="display: none">
+      <div class="modal-content">
+        <span class="close" id="modal-close">&times;</span>
+        <p id="modal-message"></p>
+      </div>
+    </div>
+
+    <script>
+      async function showModal(message) {
+        const modal = document.getElementById("modal");
+        const messageElement = document.getElementById("modal-message");
+        messageElement.textContent = message;
+        modal.style.display = "block";
+      }
+
+      // Close modal logic
+      document.getElementById("modal-close").onclick = function () {
+        document.getElementById("modal").style.display = "none";
+      };
+
+      window.onclick = function (event) {
+        const modal = document.getElementById("modal");
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
+
+      // Form submission logic
+      document
+        .getElementById("member-application-form")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault(); // Prevent default form submission
+
+          const formData = new FormData(event.target); // Gather all form data
+
+          // Add selected interests as a JSON string
+          const interests = Array.from(
+            document.querySelectorAll("input[name='interest']:checked")
+          ).map((checkbox) => checkbox.value);
+          formData.append("interests", JSON.stringify(interests));
+
+          // Get and append member grade and points
+          const memberGrade = document.getElementById("member-grade").value;
+          const memberPoints = document.getElementById("member-points").value;
+          formData.append("member_grade", memberGrade);
+          formData.append("member_points", memberPoints);
+
+          // Add the necessary files if present
+          const memberPhoto = document.getElementById("member-photo").files[0];
+          const iconFile = document.getElementById("icon-upload").files[0];
+          const pdfFile = document.getElementById("pdf-upload").files[0];
+
+          if (memberPhoto) formData.append("member_photo", memberPhoto);
+          if (iconFile) formData.append("icon_upload", iconFile);
+          if (pdfFile) formData.append("pdf_file", pdfFile);
+
+          try {
+            // Send data to the backend
+            const response = await axios.post(
+              "/api/member/addmember", // Your Node.js backend endpoint
+              formData,
+              {
+                headers: {
+                  Authorization: `Bearer ${sessionStorage.getItem(
+                    "savedToken"
+                  )}`, // Ensure token format is correct
+                },
+              }
+            );
+
+            // Handle successful response
+            showModal(`Form submitted successfully: ${response.data.message}`);
+            event.target.reset(); // Reset the form on success
+          } catch (error) {
+            // Handle error
+            const errorMessage =
+              error.response?.data?.message ||
+              "An error occurred while submitting the form. Please try again.";
+            console.error(errorMessage, error.response || error.message);
+            showModal(errorMessage); // Show error in the modal
+          }
+        });
+    </script>
+  </body>
+</html>

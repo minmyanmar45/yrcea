@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YRCEA Member Identity</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f0f4f8;
+        margin: 0;
+        padding: 0;
+        color: #333;
+        line-height: 1.6;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      .container {
+        width: 90%;
+        max-width: 600px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin: 20px auto;
+      }
+
+      .header {
+        background-color: #007bff;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+        position: relative;
+      }
+
+      .header img {
+        border-radius: 5%;
+        width: 100px;
+        height: 100px;
+        border: 2px solid #fff;
+        background-color: #007bff;
+        margin-bottom: 10px;
+      }
+
+      .header h1 {
+        font-size: 22px;
+        margin: 10px 0;
+        font-weight: bold;
+      }
+
+      .header p {
+        font-size: 14px;
+        margin: 5px 0 0;
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      .header .icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        margin-left: 10px;
+        vertical-align: middle;
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      .section {
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+      }
+
+      .section h2 {
+        font-size: 18px;
+        color: #007bff;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #007bff;
+        display: inline-block;
+        padding-bottom: 5px;
+      }
+
+      .details {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .item label {
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      .item span {
+        font-size: 14px;
+        color: #555;
+      }
+
+      .pdf-section {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      .pdf-section a {
+        text-decoration: none;
+        color: white;
+        background-color: #007bff;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: bold;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+
+      .pdf-section a:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+      }
+
+      .footer {
+        background-color: #007bff;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        font-size: 12px;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .container {
+          width: 95%;
+        }
+
+        .header img {
+          width: 80px;
+          height: 80px;
+        }
+
+        .header h1 {
+          font-size: 20px;
+        }
+
+        .section h2 {
+          font-size: 16px;
+        }
+
+        .pdf-section a {
+          font-size: 12px;
+          padding: 10px 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <img src="<%= member.member_photo %>" alt="Member Photo" />
+        <h1><%= member.name %></h1>
+        <span><%= member.memberGrade %></span><% if (member.icon_file) { %>
+        <img class="icon" src="<%= member.icon_file %>" alt="Grade Icon" />
+        <% } %>
+      </div>
+      <div class="content">
+        <div class="section">
+          <h2>Personal Details</h2>
+          <div class="details">
+            <div class="item">
+              <label>ID:</label>
+              <span><%= member.member_id %></span>
+            </div>
+            <div class="item">
+              <label>Member Issue Date:</label>
+              <span><%= member.member_card_issue_date.toDateString() %></span>
+            </div>
+
+            <div class="item">
+              <label>Card Expiration Date:</label>
+              <span><%= member.card_expiration_date.toDateString() %></span>
+            </div>
+            <!--
+            <div class="item">
+              <label>NRC NO:</label>
+              <span><%= member.nrc_no %></span>
+            </div>
+            <div class="item">
+              <label>Phone:</label>
+              <span><%= member.phone %></span>
+            </div>
+            <div class="item">
+              <label>Email:</label>
+              <span><%= member.email %></span>
+            </div>
+            -->
+            <div class="item">
+              <label>Township:</label>
+              <span><%= member.township %></span>
+            </div>
+          </div>
+        </div>
+
+        <% if (member.school || member.education) { %>
+        <div class="section">
+          <h2>Educational Details</h2>
+          <div class="details">
+            <% if (member.school) { %>
+            <div class="item">
+              <label>School:</label>
+              <span><%= member.school %></span>
+            </div>
+            <% } %> <% if (member.education) { %>
+            <div class="item">
+              <label>Education Level:</label>
+              <span><%= member.education %></span>
+            </div>
+            <% } %>
+          </div>
+        </div>
+        <% } %> <% if (member.interests && member.interests.length) { %>
+        <div class="section">
+          <h2>Interests</h2>
+          <div class="details">
+            <div class="item">
+              <label>Areas of Interest:</label>
+              <span><%= member.interests.join(', ') %></span>
+            </div>
+          </div>
+        </div>
+        <% } %> <% if (member.join_interest) { %>
+        <div class="section">
+          <h2>Community Interest</h2>
+          <div class="details">
+            <div class="item">
+              <label>Joining Interest:</label>
+              <span><%= member.join_interest %></span>
+            </div>
+          </div>
+        </div>
+        <% } %>
+      </div>
+
+      <div class="footer">&copy; 2024 YRCEA Portal</div>
+    </div>
+    <!--Header Div BG Img changer-->
+    <script>
+      // Wait until the DOM is fully loaded
+      document.addEventListener("DOMContentLoaded", function () {
+        // Get the grade span and the header element
+        const gradeSpan = document.querySelector(".header span");
+        const headerDiv = document.querySelector(".header");
+
+        // Check if both elements are present
+        if (gradeSpan && headerDiv) {
+          // Get the member grade from the span's innerHTML and trim any extra spaces
+          const memberGrade = gradeSpan.innerHTML.trim().toLowerCase();
+
+          // Define the background image URL based on the member grade using a switch case
+          let backgroundImageUrl = "";
+          switch (memberGrade) {
+            case "starter member":
+              backgroundImageUrl = "/public/bg-starter.jpeg";
+              break;
+            case "bronze member":
+              backgroundImageUrl = "/public/bg-bronze.jpeg";
+              break;
+            case "silver member":
+              backgroundImageUrl = "/public/bg-silver.jpeg";
+              break;
+            case "gold member":
+              backgroundImageUrl = "/public/bg-gold.jpeg";
+              break;
+            case "platinum member":
+              backgroundImageUrl = "/public/bg-platinum.jpeg";
+              break;
+            case "diamond member":
+              backgroundImageUrl = "/public/bg-diamond.jpeg";
+              break;
+            default:
+              console.warn("Unknown member grade:", memberGrade);
+              break;
+          }
+
+          // Apply the background image if a valid URL is determined
+          if (backgroundImageUrl) {
+            headerDiv.style.backgroundImage = `url(${backgroundImageUrl})`;
+            headerDiv.style.backgroundSize = "cover";
+            headerDiv.style.backgroundPosition = "center";
+          }
+        } else {
+          console.error("Required elements (header or span) are missing.");
+        }
+      });
+    </script>
+  </body>
+</html>

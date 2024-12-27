@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YRCEA Search Members</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(135deg, #71b7e6, #9b59b6);
+        font-family: Arial, sans-serif;
+      }
+
+      .search-container {
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        width: 80%;
+        max-width: 600px;
+        text-align: center;
+      }
+
+      .search-container h1 {
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      .search-container input {
+        width: 84%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+
+      .search-container select {
+        width: 84%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+
+      .search-container button {
+        width: 84%;
+        padding: 10px 20px;
+        margin-bottom: 15px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #2575fc;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .search-container button:hover {
+        background-color: #1a5fc1;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      table th,
+      table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: left;
+      }
+
+      table th {
+        background-color: #2575fc;
+        color: #fff;
+      }
+
+      table tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+
+      .edit-button {
+        padding: 5px 10px;
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        text-decoration: none;
+      }
+
+      .edit-button:hover {
+        background-color: #218838;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include("header.ejs") %>
+    <script>
+      document.getElementById("search").style.color = "lime";
+    </script>
+    <div class="search-container">
+      <h1>Search Members</h1>
+      <form id="searchForm">
+        <select name="field" id="field">
+          <option value="name">Name</option>
+          <option value="member_id">Member ID</option>
+          <option value="memberGrade">Member Grade</option>
+          <option value="interests">Interests</option>
+          <option value="dob">Birthday</option>
+          <option value="school">school</option>
+          <option value="township">township</option>
+          <option value="member_card_issue_date">Member Issue Date</option>
+          <option value="card_expiration_date">Card Expiration Date</option>
+        </select>
+
+        <input
+          type="text"
+          name="query"
+          id="query"
+          placeholder="Enter name or ID or grade or interests ....."
+          required
+        />
+        <button type="submit">Search</button>
+      </form>
+    </div>
+
+    <script>
+      document
+        .getElementById("searchForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault(); // Prevent default form submission
+
+          const query = document.getElementById("query").value;
+          const field = document.getElementById("field").value;
+
+          // Construct the search URL
+          const searchUrl = `/api/search/search?query=${encodeURIComponent(
+            query
+          )}&field=${encodeURIComponent(field)}`;
+
+          // Open the search results in a new tab
+          window.open(searchUrl, "_blank");
+        });
+    </script>
+  </body>
+</html>

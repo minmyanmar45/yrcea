@@ -1,0 +1,61 @@
+<html>
+  <head>
+    <title>YRCEA</title>
+    <link rel="stylesheet" href="/public/header.css" />
+    <script src="/public/axios.min.js"></script>
+  </head>
+  <script>
+    var token = "<%= typeof token !== 'undefined' ? token : '' %>";
+    if (token) {
+      sessionStorage.setItem("savedToken", "Bearer " + token);
+    }
+  </script>
+  <body>
+    <nav class="nav">
+      <a href="#" class="logo">YRCEA</a>
+
+      <!-- Hamburger Menu for Mobile -->
+      <button class="menu-toggle" aria-label="Toggle Navigation">
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+      </button>
+
+      <!-- Navigation Links -->
+      <ul class="nav-links">
+        <li><a href="/api/auth/welcome" id="welcome">Welcome</a></li>
+        <li>
+          <a href="/api/auth/dashboard" id="dashboard">Dashboard</a>
+        </li>
+        <li>
+          <a href="/api/auth/register" id="registerForm">Create account</a>
+        </li>
+        <li>
+          <a href="/api/member/memberform" id="dataEntry">Data entry</a>
+        </li>
+        <li>
+          <a href="/api/member/memberlist" id="memList">Member list</a>
+        </li>
+        <li><a href="/api/search/searchform" id="search">Report</a></li>
+        <li><a href="/api/auth/logout">Logout</a></li>
+      </ul>
+    </nav>
+
+    <!-- JS for Responsive Menu -->
+    <script>
+      let menuToggle = document.querySelector(".menu-toggle");
+      let navLinks = document.querySelector(".nav-links");
+
+      menuToggle.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+      });
+
+      // Automatically hide/show menu on window resize
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 880) {
+          navLinks.classList.remove("active"); // Reset for desktop
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YRCEA Account register</title>
+    <link rel="stylesheet" href="/public/register-form.css" />
+  </head>
+  <body>
+    <%- include("header.ejs") %>
+    <script>
+      document.getElementById("registerForm").style.color = "lime";
+    </script>
+    <!--REGISTER PAGE-->
+    <div class="container">
+      <!-- Title section 
+      <div class="title">Registration</div>
+      -->
+      <div class="content">
+        <!-- Registration form -->
+        <form action="/api/auth/register" method="post" id="regForm">
+          <div class="user-details">
+            <!-- Input for Full Name -->
+            <div class="input-box">
+              <span class="details">Full Name</span>
+              <input
+                id="displayname"
+                name="displayname"
+                type="text"
+                placeholder="Enter full name"
+                required
+              />
+            </div>
+            <!-- Input for Username -->
+            <div class="input-box">
+              <span class="details">User Name</span>
+              <input
+                id="username"
+                name="username"
+                type="text"
+                placeholder="Enter username"
+                required
+                oninput="this.setCustomValidity(/^[a-zA-Z0-9]+$/.test(this.value) ? '' : 'Username can only contain letters and numbers, without spaces or special characters.')"
+              />
+            </div>
+            <!-- Input for Mobile Number -->
+            <div class="input-box">
+              <span class="details">Mobile number</span>
+              <input
+                id="mobile"
+                name="mobile"
+                type="text"
+                placeholder="Enter mobile number"
+                required
+              />
+            </div>
+            <!-- Input for Role -->
+            <div class="input-box">
+              <span class="details">Select role</span>
+              <select
+                id="role"
+                name="role"
+                class="input-box"
+                style="
+                  height: 45px;
+                  outline: none;
+                  padding-left: 10px;
+                  border-radius: 5px;
+                  border-color: #ccc;
+                "
+                required
+              >
+                <option value="master">Master</option>
+                <option value="admin" selected>Admin</option>
+              </select>
+            </div>
+            <!-- Input for Password -->
+            <div class="input-box">
+              <span class="details">Password</span>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Enter password"
+                required
+              />
+            </div>
+
+            <script>
+              const passwordInput = document.getElementById("password");
+
+              passwordInput.addEventListener("input", function () {
+                const regex =
+                  /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+                const isValid = regex.test(this.value);
+
+                this.setCustomValidity(
+                  isValid
+                    ? ""
+                    : "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character."
+                );
+              });
+            </script>
+          </div>
+          <!-- Submit button -->
+          <div class="button">
+            <input type="submit" value="Register" />
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

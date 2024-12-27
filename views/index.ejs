@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YRCEA</title>
+    <link rel="icon" type="image/png" href="/public/star.png" />
+    <link rel="stylesheet" href="/public/index.css" />
+  </head>
+  <body>
+    <div class="wrapper" id="wrapper" style="display: none">
+      <form action="/api/auth/login" method="post" id="loginForm">
+        <h2>YRCEA Portal Login</h2>
+        <div class="input-field">
+          <input name="username" id="username" type="text" required />
+          <label>Enter your email</label>
+        </div>
+        <div class="input-field">
+          <input name="password" id="password" type="password" required />
+          <label>Enter your password</label>
+        </div>
+        <button type="submit">Log In</button>
+      </form>
+    </div>
+    <script src="/public/axios.min.js"></script>
+
+    <script>
+      /**
+       * Check if the user is already logged in.
+       * If logged in, redirect to the dashboard; otherwise, show the login form.
+       */
+      async function checkSession() {
+        try {
+          const response = await axios.get("/api/auth/checksession");
+          if (response.status === 200 && response.data.user) {
+            // User is logged in, redirect to the dashboard
+            window.location.href = "/api/auth/welcome";
+          } else {
+            // Show login form if not logged in
+            document.getElementById("wrapper").style.display = "block";
+            document.getElementById("username").focus();
+          }
+        } catch (err) {
+          // Show login form if session check fails
+          document.getElementById("wrapper").style.display = "block";
+          document.getElementById("username").focus();
+        }
+      }
+
+      // Call checkSession on page load
+      checkSession();
+    </script>
+  </body>
+</html>

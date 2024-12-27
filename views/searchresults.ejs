@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search Results</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+
+      h1 {
+        color: #2575fc;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      table th,
+      table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: left;
+      }
+
+      table th {
+        background-color: #2575fc;
+        color: #fff;
+      }
+
+      table tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+
+      td a {
+        text-decoration: none;
+        color: #007bff; /* Blue link color */
+        font-weight: 600;
+        font-size: 14px; /* Adjusted font size */
+        transition: color 0.3s ease, transform 0.3s ease;
+      }
+
+      td a:hover {
+        color: #0056b3; /* Darker blue on hover */
+        text-decoration: underline;
+        transform: scale(1.05); /* Slight scaling effect */
+      }
+
+      img.icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .edit-button {
+        padding: 5px 10px;
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .edit-button:hover {
+        background-color: #218838;
+      }
+
+      .no-results {
+        margin-top: 20px;
+        color: #555;
+        font-size: 18px;
+      }
+
+      /* Pagination Styles */
+      .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 0;
+        gap: 10px;
+      }
+
+      .pagination a {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        color: #2575fc;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: all 0.2s;
+      }
+
+      .pagination a.disabled {
+        pointer-events: none;
+        color: #bbb;
+        border-color: #eee;
+      }
+
+      .pagination a:hover:not(.disabled) {
+        background-color: #2575fc;
+        color: #fff;
+      }
+
+      .pagination-info {
+        background-color: #f1f5fc;
+        padding: 8px 16px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+        font-weight: bold;
+        color: #333;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Modal Styling */
+      #qrModal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+      .modal-content {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        width: 350px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+      .modal-content h2 {
+        margin-top: 0;
+      }
+      .modal-content canvas {
+        margin: 20px 0;
+      }
+      .modal-content button {
+        margin-top: 10px;
+        padding: 8px 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .modal-content button:hover {
+        background-color: #0056b3;
+      }
+      .modal-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 18px;
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Search Results</h1>
+    <% if (members.length > 0) { %>
+    <table>
+      <thead>
+        <tr>
+          <th>Member ID</th>
+          <th>Name</th>
+          <th>Grade</th>
+          <th>Icon</th>
+          <th>Points</th>
+          <th>Interests</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% members.forEach((member) => { %>
+        <tr>
+          <td><%= member.member_id %></td>
+          <td>
+            <a
+              href="/api/member/memberdetail/<%= member._id %>"
+              target="_blank"
+            >
+              <%= member.name %></a
+            >
+          </td>
+          <td>
+            <a
+              href="javascript:void(0);"
+              onclick="showQRCode('<%= member.name %>', '<%= member.member_id %>', '<%= member._id %>', '<%= member.icon_file %>')"
+            >
+              <%= member.memberGrade %>
+            </a>
+          </td>
+
+          <td>
+            <img src="<%= member.icon_file %>" alt="Icon" class="icon" />
+          </td>
+          <td><%= member.memberPoints %> Points</td>
+          <td><%= member.interests.join(", ") %></td>
+          <td>
+            <button
+              class="edit-button"
+              onclick="openEditWindow('<%= member._id %>')"
+            >
+              Edit
+            </button>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <!-- First Page -->
+      <a
+        href="?query=<%= query %>&field=<%= field %>&page=1"
+        class="<%= currentPage === 1 ? 'disabled' : '' %>"
+      >
+        First
+      </a>
+
+      <!-- Previous Page -->
+      <a
+        href="?query=<%= query %>&field=<%= field %>&page=<%= currentPage - 1 %>"
+        class="<%= currentPage === 1 ? 'disabled' : '' %>"
+      >
+        Previous
+      </a>
+
+      <!-- Current Page Info -->
+      <div class="pagination-info">
+        Page <%= currentPage %> of <%= totalPages %>
+      </div>
+
+      <!-- Next Page -->
+      <a
+        href="?query=<%= query %>&field=<%= field %>&page=<%= currentPage + 1 %>"
+        class="<%= currentPage === totalPages ? 'disabled' : '' %>"
+      >
+        Next
+      </a>
+
+      <!-- Last Page -->
+      <a
+        href="?query=<%= query %>&field=<%= field %>&page=<%= totalPages %>"
+        class="<%= currentPage === totalPages ? 'disabled' : '' %>"
+      >
+        Last
+      </a>
+    </div>
+    <% } else { %>
+    <p class="no-results">
+      No members found for "<%= query %>" in "<%= field %>".
+    </p>
+    <% } %>
+
+    <script>
+      function openEditWindow(memberId) {
+        const url = `/api/search/editmemberform/${memberId}`;
+        const width = 600;
+        const height = 700;
+        const left = (screen.width - width) / 2;
+        const top = (screen.height - height) / 2;
+
+        // Try opening the URL in a new window
+        const newWindow = window.open(
+          url,
+          "Edit Member",
+          `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
+        );
+
+        // If the new window was blocked, alert the user
+        if (!newWindow) {
+          alert(
+            "Unable to open the edit window. Please allow pop-ups for this site in your browser settings."
+          );
+        }
+      }
+    </script>
+
+    <!-- Updated Modal -->
+    <div id="qrModal">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <h2 id="qrMemberInfo">Member Info</h2>
+
+        <!-- QR Code Canvas -->
+        <canvas id="qrcodeCanvas"></canvas>
+
+        <!-- Buttons -->
+        <div class="modal-buttons">
+          <button onclick="closeModal()" class="close-btn">Close</button>
+          <button onclick="printQRCode()" class="print-btn">Print</button>
+          <button onclick="downloadQRCode()" class="download-btn">
+            Download
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      /* Enhanced Modal Buttons */
+      .modal-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .modal-buttons button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+
+      .modal-buttons .close-btn {
+        background-color: #ff4b5c;
+        color: white;
+      }
+
+      .modal-buttons .close-btn:hover {
+        background-color: #e0434d;
+        transform: scale(1.05);
+      }
+
+      .modal-buttons .print-btn {
+        background-color: #4caf50;
+        color: white;
+      }
+
+      .modal-buttons .print-btn:hover {
+        background-color: #43a047;
+        transform: scale(1.05);
+      }
+
+      .modal-buttons .download-btn {
+        background-color: #007bff;
+        color: white;
+      }
+
+      .modal-buttons .download-btn:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+      }
+    </style>
+    <!--QR Script-->
+    <script src="/public/qrcode.min.js">
+      //src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"
+    </script>
+
+    <script>
+      // Show QR Code Modal
+      function showQRCode(memberName, memberId, dID, photoUrl) {
+        const memberInfo = document.getElementById("qrMemberInfo");
+        memberInfo.innerHTML = `${memberName}<br>(ID: ${memberId})`;
+
+        const qrCanvas = document.getElementById("qrcodeCanvas");
+        const context = qrCanvas.getContext("2d");
+        context.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
+
+        const qrLink = `${window.location.origin}/api/member/memberverify/${dID}`;
+
+        QRCode.toCanvas(
+          qrCanvas,
+          qrLink,
+          { width: 200, margin: 2 },
+          (error) => {
+            if (error) {
+              console.error("Error generating QR Code:", error);
+              context.fillStyle = "red";
+              context.font = "14px Arial";
+              context.fillText("Failed to generate QR Code", 10, 50);
+              return;
+            }
+
+            const img = new Image();
+            img.src = photoUrl;
+            img.onload = () => {
+              const imgSize = 50;
+              const x = (qrCanvas.width - imgSize) / 2;
+              const y = (qrCanvas.height - imgSize) / 2;
+              context.clearRect(x, y, imgSize, imgSize);
+              context.drawImage(img, x, y, imgSize, imgSize);
+            };
+          }
+        );
+
+        const modal = document.getElementById("qrModal");
+        modal.style.display = "flex";
+      }
+
+      // Close Modal
+      function closeModal() {
+        const modal = document.getElementById("qrModal");
+        modal.style.display = "none";
+      }
+
+      // Print QR Code
+      function printQRCode() {
+        const qrCanvas = document.getElementById("qrcodeCanvas");
+        const qrImage = qrCanvas.toDataURL("image/png");
+        const memberInfo = document.getElementById("qrMemberInfo").innerHTML;
+
+        const printWindow = window.open("", "_blank");
+        printWindow.document.write(`
+      <html>
+        <head>
+          <title>Print QR Code</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              text-align: center;
+              padding: 20px;
+              margin: 0;
+            }
+            img {
+              display: block;
+              margin: 0 auto;
+              width: 200px;
+            }
+          </style>
+        </head>
+        <body>
+          <h2>${memberInfo}</h2>
+          <img src="${qrImage}" alt="QR Code" />
+          <script>
+            window.onload = function() {
+              window.print();
+              window.close();
+            }
+          <\/script>
+        </body>
+      </html>
+    `);
+        printWindow.document.close();
+      }
+
+      // Download QR Code
+      function downloadQRCode() {
+        const qrCanvas = document.getElementById("qrcodeCanvas");
+        const qrImage = qrCanvas.toDataURL("image/jpeg");
+
+        const downloadLink = document.createElement("a");
+        downloadLink.href = qrImage;
+        downloadLink.download = "QR_Code.jpg";
+        downloadLink.click();
+      }
+
+      // Close modal when clicking outside
+      window.addEventListener("click", function (event) {
+        const modal = document.getElementById("qrModal");
+        if (event.target === modal) {
+          closeModal();
+        }
+      });
+    </script>
+  </body>
+</html>
